@@ -1,5 +1,1173 @@
-Index.html
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>HYPOM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Serif+4:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-const SUPABASE_URL = "https://supabase.com/dashboard/project/wtehpwgcvdgfdhaurvpk/settings/api";
+:root{
+  --ink:#16233F;
+  --ink-soft:#1F3153;
+  --ink-line: rgba(243,233,210,0.14);
+  --parchment:#F3E9D2;
+  --parchment-dark:#E7D8AF;
+  --brass:#B8935F;
+  --brass-light:#D4B483;
+  --rust:#A8452F;
+  --sage:#4F6F52;
+  --charcoal:#2A2420;
+  --cream:#F3E9D2;
+  --shadow: 0 8px 24px rgba(10,15,30,0.35);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--ink);
+  color:var(--cream);
+  font-family:'Source Serif 4', serif;
+  min-height:100vh;
+}
+::selection{background:var(--brass); color:var(--ink);}
 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0ZWhwd2djdmRnZmRoYXVydnBrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwMzg1MDksImV4cCI6MjEwMDYxNDUwOX0.QT963Kz0bUKka4lgDGrVhrfs4L1dHY-0KF9VHvKR7FI";
+/* ---------- header ---------- */
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:linear-gradient(180deg, var(--ink) 0%, var(--ink) 85%, transparent 100%);
+  border-bottom:1px solid var(--ink-line);
+  padding:18px 28px 14px;
+}
+.topbar-inner{
+  max-width:1180px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand-title{
+  font-family:'Fraunces', serif; font-weight:700; font-size:22px; letter-spacing:0.02em;
+  color:var(--cream);
+}
+.brand-sub{
+  font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--brass-light);
+  letter-spacing:0.08em; text-transform:uppercase; margin-top:2px;
+}
+.tabs{display:flex; gap:6px; background:var(--ink-soft); padding:4px; border-radius:10px; border:1px solid var(--ink-line);}
+.tab-btn{
+  font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.03em;
+  background:transparent; border:none; color:var(--brass-light); padding:9px 16px;
+  border-radius:7px; cursor:pointer; transition:all .15s ease; text-transform:uppercase;
+}
+.tab-btn:hover{color:var(--cream);}
+.tab-btn.active{background:var(--brass); color:var(--ink); font-weight:600;}
+
+.tagline{
+  max-width:1180px; margin:10px auto 0; padding:0 0; font-size:13.5px; color:var(--brass-light);
+  font-style:italic;
+}
+
+/* ---------- main container ---------- */
+.container{max-width:1180px; margin:0 auto; padding:28px 28px 80px;}
+
+/* ---------- stats strip ---------- */
+.stats{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:28px;
+}
+.stat-card{
+  background:var(--ink-soft); border:1px solid var(--ink-line); border-radius:10px; padding:16px 18px;
+}
+.stat-num{font-family:'Fraunces', serif; font-size:30px; font-weight:600; color:var(--brass-light); line-height:1;}
+.stat-label{font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:rgba(243,233,210,0.6); margin-top:6px;}
+
+/* ---------- section heading ---------- */
+.section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+.section-title{font-family:'Fraunces', serif; font-size:20px; font-weight:600; color:var(--cream);}
+
+/* ---------- folder grid ---------- */
+.folder-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:18px;}
+.folder-card{
+  background:var(--parchment); color:var(--charcoal); border-radius:3px 10px 10px 10px;
+  padding:20px 18px 18px; position:relative; cursor:pointer; box-shadow:var(--shadow);
+  border:1px solid var(--parchment-dark); transition:transform .15s ease, box-shadow .15s ease;
+}
+.folder-card:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(10,15,30,0.45);}
+.folder-tab{
+  position:absolute; top:-13px; left:16px; background:var(--brass); color:var(--ink);
+  font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600; letter-spacing:0.05em;
+  padding:4px 10px; border-radius:5px 5px 0 0; text-transform:uppercase;
+}
+.folder-name{font-family:'Fraunces', serif; font-size:19px; font-weight:600; margin:8px 0 2px;}
+.folder-role{font-size:13.5px; color:#5c5348; margin-bottom:12px;}
+.folder-meta{font-family:'IBM Plex Mono', monospace; font-size:11px; color:#6b6152; display:flex; flex-direction:column; gap:3px; margin-bottom:14px;}
+.folder-meta b{color:var(--rust);}
+.progress-row{display:flex; align-items:center; gap:8px; margin-bottom:4px;}
+.progress-track{flex:1; height:7px; background:var(--parchment-dark); border-radius:4px; overflow:hidden;}
+.progress-fill{height:100%; background:var(--sage); border-radius:4px; transition:width .3s ease;}
+.progress-pct{font-family:'IBM Plex Mono', monospace; font-size:11px; color:#5c5348; min-width:34px; text-align:right;}
+.progress-caption{font-size:11px; color:#7a6f5f; font-family:'IBM Plex Mono', monospace;}
+
+.add-card{
+  border:2px dashed rgba(243,233,210,0.28); border-radius:10px; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:8px; min-height:170px; cursor:pointer; color:var(--brass-light);
+  transition:all .15s ease;
+}
+.add-card:hover{border-color:var(--brass); background:rgba(184,147,95,0.08); color:var(--cream);}
+.add-plus{font-family:'Fraunces', serif; font-size:34px; line-height:1;}
+.add-label{font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.04em;}
+
+/* ---------- empty state ---------- */
+.empty-state{
+  border:1px dashed var(--ink-line); border-radius:12px; padding:50px 24px; text-align:center; color:rgba(243,233,210,0.65);
+}
+.empty-state h3{font-family:'Fraunces', serif; color:var(--cream); font-weight:600; margin:0 0 8px;}
+.empty-state p{font-size:14px; max-width:420px; margin:0 auto;}
+
+/* ---------- forms / modal ---------- */
+.overlay{
+  position:fixed; inset:0; background:rgba(10,15,30,0.6); display:flex; align-items:center; justify-content:center;
+  z-index:100; padding:20px;
+}
+.modal{
+  background:var(--parchment); color:var(--charcoal); border-radius:12px; padding:26px 26px 22px; width:100%; max-width:460px;
+  box-shadow:0 24px 60px rgba(0,0,0,0.5); max-height:90vh; overflow-y:auto;
+}
+.modal h3{font-family:'Fraunces', serif; margin:0 0 18px; font-size:20px; color:var(--charcoal);}
+.field{margin-bottom:14px;}
+.field label{display:block; font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:#6b6152; margin-bottom:6px;}
+.field input, .field select, .field textarea{
+  width:100%; padding:9px 11px; border:1px solid #c9b98d; border-radius:6px; background:#fffdf7;
+  font-family:'Source Serif 4', serif; font-size:14px; color:var(--charcoal);
+}
+.field textarea{resize:vertical; min-height:80px;}
+.field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--brass); outline-offset:1px;}
+.form-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:18px;}
+
+button{font-family:'IBM Plex Mono', monospace; cursor:pointer;}
+.btn{padding:9px 16px; border-radius:7px; border:1px solid transparent; font-size:12.5px; letter-spacing:0.03em; text-transform:uppercase; font-weight:500;}
+.btn-primary{background:var(--brass); color:var(--ink); border-color:var(--brass);}
+.btn-primary:hover{background:var(--brass-light);}
+.btn-ghost{background:transparent; color:#6b6152; border-color:#c9b98d;}
+.btn-ghost:hover{background:rgba(0,0,0,0.04);}
+.btn-danger{background:transparent; color:var(--rust); border-color:var(--rust);}
+.btn-danger:hover{background:rgba(168,69,47,0.08);}
+.btn-dark{background:var(--ink); color:var(--cream); border-color:var(--ink);}
+.btn-dark:hover{background:var(--ink-soft);}
+
+/* ---------- detail view ---------- */
+.back-link{display:inline-flex; align-items:center; gap:6px; color:var(--brass-light); text-decoration:none; font-family:'IBM Plex Mono', monospace; font-size:12px; cursor:pointer; margin-bottom:18px; background:none; border:none; padding:0;}
+.back-link:hover{color:var(--cream);}
+
+.detail-header{
+  background:var(--parchment); color:var(--charcoal); border-radius:12px; padding:22px 24px; margin-bottom:24px;
+  display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; box-shadow:var(--shadow);
+}
+.detail-title{font-family:'Fraunces', serif; font-size:24px; font-weight:700;}
+.detail-role{color:#5c5348; font-size:14px; margin-top:2px;}
+.detail-facts{display:flex; gap:22px; flex-wrap:wrap; margin-top:14px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:#6b6152;}
+.detail-facts span b{display:block; color:var(--charcoal); font-family:'Source Serif 4', serif; font-size:13.5px; margin-top:2px;}
+.detail-actions{display:flex; gap:8px; align-self:flex-start;}
+.detail-actions button{padding:7px 12px; font-size:11px;}
+
+.detail-body{display:grid; grid-template-columns:230px 1fr; gap:22px;}
+@media (max-width:760px){.detail-body{grid-template-columns:1fr;}}
+
+.cat-list{display:flex; flex-direction:column; gap:6px;}
+.cat-item{
+  background:var(--ink-soft); border:1px solid var(--ink-line); border-radius:9px; padding:12px 14px; cursor:pointer;
+  transition:all .15s ease;
+}
+.cat-item:hover{border-color:var(--brass);}
+.cat-item.active{background:var(--brass); border-color:var(--brass);}
+.cat-item.active .cat-name, .cat-item.active .cat-desc{color:var(--ink);}
+.cat-name{font-family:'Fraunces', serif; font-size:14.5px; font-weight:600; color:var(--cream); display:flex; justify-content:space-between;}
+.cat-count{font-family:'IBM Plex Mono', monospace; font-size:11px; opacity:0.8;}
+.cat-desc{font-size:11.5px; color:rgba(243,233,210,0.55); margin-top:3px; line-height:1.4;}
+
+.entries-panel h3{font-family:'Fraunces', serif; font-size:18px; margin:0 0 4px; color:var(--cream);}
+.entries-panel .cat-desc-full{color:rgba(243,233,210,0.6); font-size:13px; margin-bottom:16px;}
+
+.entry-card{
+  background:var(--parchment); color:var(--charcoal); border-radius:9px; padding:16px 18px; margin-bottom:12px;
+  position:relative; box-shadow:0 4px 14px rgba(10,15,30,0.25);
+}
+.entry-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+.entry-title{font-family:'Fraunces', serif; font-weight:600; font-size:15.5px;}
+.entry-content{font-size:13.5px; line-height:1.55; margin-top:6px; color:#3a332b; white-space:pre-wrap;}
+.entry-foot{display:flex; justify-content:space-between; align-items:center; margin-top:12px;}
+.entry-date{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:#8a7f6c;}
+.entry-btns{display:flex; gap:6px;}
+.entry-btns button{padding:5px 10px; font-size:10.5px; border-radius:5px;}
+
+.pill{font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.04em; padding:3px 8px; border-radius:20px; border:1px solid #c9b98d; color:#6b6152;}
+
+.seal{
+  position:absolute; top:12px; right:14px; width:64px; height:64px; opacity:0.92; pointer-events:none;
+}
+
+.add-entry-box{
+  background:var(--ink-soft); border:1px solid var(--ink-line); border-radius:9px; padding:16px; margin-top:6px;
+}
+.add-entry-box .field label{color:var(--brass-light);}
+.add-entry-box input, .add-entry-box textarea{background:rgba(255,253,247,0.95);}
+
+/* ---------- search ---------- */
+.search-bar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px;}
+.search-bar input[type="text"]{
+  flex:2; min-width:220px; padding:11px 14px; border-radius:8px; border:1px solid var(--ink-line);
+  background:var(--ink-soft); color:var(--cream); font-family:'Source Serif 4', serif; font-size:14px;
+}
+.search-bar select{
+  flex:1; min-width:150px; padding:11px 12px; border-radius:8px; border:1px solid var(--ink-line);
+  background:var(--ink-soft); color:var(--cream); font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+}
+.search-bar input::placeholder{color:rgba(243,233,210,0.4);}
+
+.result-card{
+  background:var(--parchment); color:var(--charcoal); border-radius:9px; padding:16px 18px; margin-bottom:12px; box-shadow:var(--shadow);
+}
+.result-meta{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:#8a7f6c; margin-bottom:6px; display:flex; gap:10px; flex-wrap:wrap;}
+.result-meta b{color:var(--rust);}
+
+.loading{color:var(--brass-light); font-family:'IBM Plex Mono', monospace; font-size:13px; padding:40px; text-align:center;}
+.err{color:var(--rust); font-family:'IBM Plex Mono', monospace; font-size:12px; padding:10px 0;}
+
+/* ---------- home / mascotte ---------- */
+.home-hero{
+  display:flex; align-items:center; gap:40px; padding:36px 10px 46px; flex-wrap:wrap;
+}
+.home-owl{flex:0 0 200px; width:200px;}
+.home-text{flex:1; min-width:260px;}
+.home-title{font-family:'Fraunces', serif; font-size:32px; font-weight:700; color:var(--cream); margin:0 0 10px;}
+.home-sub{font-size:15px; color:rgba(243,233,210,0.75); max-width:520px; line-height:1.55; margin-bottom:22px;}
+.home-cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-top:8px;}
+.home-card{
+  background:var(--parchment); color:var(--charcoal); border-radius:12px; padding:20px 20px 18px;
+  cursor:pointer; box-shadow:var(--shadow); border:1px solid var(--parchment-dark);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.home-card:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(10,15,30,0.45);}
+.home-card-icon{font-size:26px; margin-bottom:8px;}
+.home-card h4{font-family:'Fraunces', serif; font-size:17px; margin:0 0 6px;}
+.home-card p{font-size:13px; color:#5c5348; margin:0; line-height:1.5;}
+.brand{cursor:pointer;}
+
+/* ---------- colloquio AI ---------- */
+.interview-setup{max-width:480px; margin:10px 0 24px;}
+.chat-shell{
+  background:var(--ink-soft); border:1px solid var(--ink-line); border-radius:12px;
+  display:flex; flex-direction:column; height:min(600px, 70vh); overflow:hidden;
+}
+.chat-messages{flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:12px;}
+.msg{max-width:78%; padding:11px 14px; border-radius:12px; font-size:13.5px; line-height:1.5;}
+.msg-owl{background:var(--parchment); color:var(--charcoal); align-self:flex-start; border-bottom-left-radius:3px;}
+.msg-user{background:var(--brass); color:var(--ink); align-self:flex-end; border-bottom-right-radius:3px;}
+.msg-owl-label{font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--brass); margin-bottom:6px; display:flex; align-items:center; gap:5px;}
+.chat-input-row{display:flex; gap:8px; padding:12px; border-top:1px solid var(--ink-line);}
+.chat-input-row textarea{
+  flex:1; resize:none; border-radius:8px; border:1px solid var(--ink-line); background:var(--ink);
+  color:var(--cream); padding:10px 12px; font-family:'Source Serif 4', serif; font-size:13.5px; min-height:44px; max-height:100px;
+}
+.chat-input-row textarea:focus{outline:1px solid var(--brass);}
+.chat-typing{align-self:flex-start; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--brass-light); padding-left:4px;}
+.btn-mic{
+  flex:0 0 auto; width:44px; height:44px; border-radius:50%; border:1px solid var(--brass);
+  background:var(--ink); color:var(--brass-light); font-size:18px; display:flex; align-items:center; justify-content:center;
+  transition:all .15s ease;
+}
+.btn-mic:hover{background:var(--ink-soft);}
+.btn-mic.listening{background:var(--rust); border-color:var(--rust); color:#fff; animation:micPulse 1.1s infinite;}
+@keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(168,69,47,0.5);} 70%{box-shadow:0 0 0 10px rgba(168,69,47,0);} 100%{box-shadow:0 0 0 0 rgba(168,69,47,0);}}
+.chat-toolbar{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:14px; flex-wrap:wrap;}
+.extract-summary{
+  background:var(--parchment); color:var(--charcoal); border-radius:10px; padding:16px 18px; margin-top:16px;
+}
+.extract-summary h4{font-family:'Fraunces', serif; margin:0 0 8px;}
+
+@media (max-width:600px){
+  .topbar-inner{flex-direction:column; align-items:flex-start;}
+  .container{padding:20px 16px 60px;}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const CATEGORIES = [
+  {key:'processi', label:'Processi chiave', desc:'Come si fanno le cose, passo dopo passo'},
+  {key:'contatti', label:'Contatti e relazioni', desc:'Persone da conoscere, dentro e fuori l\'azienda'},
+  {key:'strumenti', label:'Strumenti e sistemi', desc:'Accessi, configurazioni, scorciatoie tecniche'},
+  {key:'problemi', label:'Problemi ricorrenti', desc:'Errori già visti e come sono stati risolti'},
+  {key:'decisioni', label:'Decisioni e perché', desc:'Scelte fatte in passato e le ragioni dietro'},
+  {key:'consigli', label:'Consigli pratici', desc:'Trucchi del mestiere, non scritti da nessuna parte'}
+];
+const STORAGE_KEY = 'archivio-memoria-stato';
+
+let state = {
+  loading: true,
+  error: null,
+  employees: [],
+  entries: [],
+  view: {type:'home'}, // {type:'home'} | {type:'dashboard'} | {type:'detail', id, cat} | {type:'search'} | {type:'interview'}
+  showAddEmployee: false,
+  addEntryOpenFor: null, // category key
+  interview: {employeeId: null, messages: [], sending: false, extracting: false, extracted: null, voiceOn: true, listening: false}
+};
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function escapeHtml(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDate(d){
+  if(!d) return '—';
+  const dt = new Date(d + 'T00:00:00');
+  if(isNaN(dt)) return d;
+  return dt.toLocaleDateString('it-IT', {day:'2-digit', month:'short', year:'numeric'});
+}
+function daysUntil(d){
+  if(!d) return null;
+  const target = new Date(d + 'T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.round((target - today) / 86400000);
+}
+
+async function loadState(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      state.employees = parsed.employees || [];
+      state.entries = parsed.entries || [];
+    }
+  }catch(e){
+    // chiave non esistente al primo avvio: normale, si parte vuoti
+  }
+  state.loading = false;
+  render();
+}
+
+async function persist(){
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify({employees: state.employees, entries: state.entries}), true);
+  }catch(e){
+    state.error = 'Impossibile salvare le modifiche. Riprova.';
+  }
+}
+
+function coverageForEmployee(empId){
+  const covered = new Set(
+    state.entries.filter(e => e.employeeId === empId && e.status === 'sealed').map(e => e.category)
+  );
+  return covered.size;
+}
+function entriesFor(empId, cat){
+  return state.entries.filter(e => e.employeeId === empId && e.category === cat)
+    .sort((a,b) => b.createdAt - a.createdAt);
+}
+
+function sealSVG(dateLabel){
+  return `<svg class="seal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="rough1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter>
+    </defs>
+    <g filter="url(#rough1)" transform="rotate(-14 50 50)" opacity="0.85">
+      <circle cx="50" cy="50" r="34" fill="none" stroke="#4F6F52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="27" fill="none" stroke="#4F6F52" stroke-width="1.4"/>
+      <text x="50" y="46" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" font-weight="700" fill="#4F6F52" letter-spacing="1">SIGILLATO</text>
+      <text x="50" y="60" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="7" fill="#4F6F52">${escapeHtml(dateLabel)}</text>
+    </g>
+  </svg>`;
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  if(state.loading){
+    app.innerHTML = `<div class="loading">Apertura dello schedario…</div>`;
+    return;
+  }
+  const activeTab = ['search','interview','dashboard'].includes(state.view.type) ? state.view.type : 'home';
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand" id="brand-home">
+          ${brandSeal()}
+          <div>
+            <div class="brand-title">HYPOM</div>
+            <div class="brand-sub">Cattura della conoscenza aziendale</div>
+          </div>
+        </div>
+        <div class="tabs">
+          <button class="tab-btn ${activeTab==='dashboard'?'active':''}" data-nav="dashboard">Cruscotto</button>
+          <button class="tab-btn ${activeTab==='interview'?'active':''}" data-nav="interview">Colloquio AI</button>
+          <button class="tab-btn ${activeTab==='search'?'active':''}" data-nav="search">Cerca nell'archivio</button>
+        </div>
+      </div>
+      <div class="tagline">Quando qualcuno se ne va, la sua esperienza non deve andarsene con lui. Registra, cataloga, sigilla.</div>
+    </div>
+    <div class="container" id="container"></div>
+  `;
+  document.querySelectorAll('[data-nav]').forEach(b => b.onclick = () => {
+    state.view = {type:b.dataset.nav};
+    render();
+  });
+  document.getElementById('brand-home').onclick = () => { state.view = {type:'home'}; render(); };
+
+  const c = document.getElementById('container');
+  if(state.error){
+    c.innerHTML = `<div class="err">${escapeHtml(state.error)}</div>`;
+  }
+  if(state.view.type === 'home') renderHome(c);
+  else if(state.view.type === 'dashboard') renderDashboard(c);
+  else if(state.view.type === 'detail') renderDetail(c);
+  else if(state.view.type === 'search') renderSearch(c);
+  else if(state.view.type === 'interview') renderInterview(c);
+
+  if(state.showAddEmployee) renderAddEmployeeModal();
+}
+
+function owlSVG(){
+  const rnd = (seed) => { const x = Math.sin(seed*999)*10000; return x - Math.floor(x); };
+
+  // -- piume del petto: righe sovrapposte a scaglie, con centerline e ombra --
+  let chestFeathers = '';
+  const rows = [
+    {y:118, n:6, rx:9, ry:12, base:'#EFE1BE'},
+    {y:140, n:7, rx:10, ry:13, base:'#E9D8AC'},
+    {y:163, n:7, rx:10.5, ry:13.5, base:'#E3D09E'},
+    {y:186, n:6, rx:10, ry:13, base:'#DCC791'},
+    {y:207, n:5, rx:9, ry:11, base:'#D3BC80'}
+  ];
+  rows.forEach((row,ri) => {
+    const startX = 120 - (row.n-1)*11;
+    for(let i=0;i<row.n;i++){
+      const x = startX + i*22 + (rnd(ri*10+i)-0.5)*3;
+      const y = row.y + (rnd(ri*7+i+3)-0.5)*4;
+      const shade = rnd(ri*13+i) > 0.6 ? '#B99A5C' : row.base;
+      chestFeathers += `<path d="M${x} ${y-row.ry} Q${x-row.rx} ${y} ${x} ${y+row.ry} Q${x+row.rx} ${y} ${x} ${y-row.ry} Z" fill="${shade}" stroke="#8A6A3A" stroke-width="0.6" opacity="0.95"/>`;
+      chestFeathers += `<line x1="${x}" y1="${y-row.ry+2}" x2="${x}" y2="${y+row.ry-3}" stroke="#8A6A3A" stroke-width="0.5" opacity="0.5"/>`;
+    }
+  });
+
+  // -- piume alari: file di remiganti allungate con barratura --
+  function wingFeathers(mirror){
+    const sign = mirror ? -1 : 1;
+    let s = '';
+    const cx0 = 120 + sign*58;
+    const rowsW = [
+      {cy:128, n:5, len:34, w:9},
+      {cy:158, n:6, len:40, w:10},
+      {cy:190, n:6, len:36, w:9.5}
+    ];
+    rowsW.forEach((row,ri) => {
+      for(let i=0;i<row.n;i++){
+        const t = i - (row.n-1)/2;
+        const x = cx0 + sign*Math.abs(t)*3 + t*2;
+        const y = row.cy + Math.abs(t)*4;
+        const rot = sign * (14 + t*6);
+        const dark = rnd(ri*5+i+sign) > 0.5 ? '#4A3018' : '#6B4423';
+        s += `<g transform="rotate(${rot} ${x} ${y})">
+          <ellipse cx="${x}" cy="${y}" rx="${row.w/2}" ry="${row.len/2}" fill="#7A4E2A" stroke="#3F2A16" stroke-width="0.8"/>
+          <line x1="${x}" y1="${y-row.len/2+3}" x2="${x}" y2="${y+row.len/2-3}" stroke="#3F2A16" stroke-width="0.6" opacity="0.6"/>
+          <ellipse cx="${x}" cy="${y+row.len*0.18}" rx="${row.w/2-0.5}" ry="${row.len/5}" fill="${dark}" opacity="0.75"/>
+        </g>`;
+      }
+    });
+    return s;
+  }
+
+  // -- raggiera del disco facciale --
+  let faceRays = '';
+  for(let a=-100; a<=100; a+=8){
+    const rad = a*Math.PI/180;
+    const inner = 30, outer = 54;
+    const x1 = 120 + Math.sin(rad)*inner, y1 = 108 - Math.cos(rad)*inner + 14;
+    const x2 = 120 + Math.sin(rad)*outer, y2 = 108 - Math.cos(rad)*outer + 20;
+    faceRays += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#C9A867" stroke-width="1" opacity="${(rnd(a+200)*0.4+0.35).toFixed(2)}"/>`;
+  }
+
+  return `<svg viewBox="0 0 240 260" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+    <defs>
+      <radialGradient id="faceGrad" cx="50%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#FCF7EA"/>
+        <stop offset="70%" stop-color="#EBD9AE"/>
+        <stop offset="100%" stop-color="#BC9A5E"/>
+      </radialGradient>
+      <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="10%" y2="100%">
+        <stop offset="0%" stop-color="#8F5F35"/>
+        <stop offset="55%" stop-color="#6E4526"/>
+        <stop offset="100%" stop-color="#4C3018"/>
+      </linearGradient>
+      <radialGradient id="eyeGrad" cx="35%" cy="30%" r="70%">
+        <stop offset="0%" stop-color="#4A3620"/>
+        <stop offset="55%" stop-color="#1B140C"/>
+        <stop offset="100%" stop-color="#000000"/>
+      </radialGradient>
+      <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0A0F1E" flood-opacity="0.35"/>
+      </filter>
+    </defs>
+
+    <!-- ramo -->
+    <rect x="14" y="234" width="212" height="15" rx="7.5" fill="#3E2C1A"/>
+    <rect x="14" y="234" width="212" height="5" rx="2.5" fill="#5A4128"/>
+    <rect x="14" y="243" width="212" height="4" rx="2" fill="#2B1E12" opacity="0.5"/>
+
+    <g filter="url(#softShadow)">
+      <!-- coda -->
+      <path d="M98 208 L84 252 L112 216 Z" fill="#5C3A20"/>
+      <path d="M98 208 L84 252 L112 216 Z" fill="none" stroke="#3F2A16" stroke-width="1" opacity="0.5"/>
+      <path d="M142 208 L156 252 L128 216 Z" fill="#5C3A20"/>
+      <path d="M142 208 L156 252 L128 216 Z" fill="none" stroke="#3F2A16" stroke-width="1" opacity="0.5"/>
+
+      <!-- ali -->
+      <path d="M58 104 Q16 148 32 214 Q54 236 84 222 Q62 178 70 116 Z" fill="url(#bodyGrad)"/>
+      <path d="M182 104 Q224 148 208 214 Q186 236 156 222 Q178 178 170 116 Z" fill="url(#bodyGrad)"/>
+      <g>${wingFeathers(false)}</g>
+      <g>${wingFeathers(true)}</g>
+
+      <!-- corpo -->
+      <ellipse cx="120" cy="152" rx="68" ry="80" fill="url(#bodyGrad)"/>
+      <g fill="#3F2A16" opacity="0.5">
+        <ellipse cx="66" cy="112" rx="4" ry="6.5" transform="rotate(-22 66 112)"/>
+        <ellipse cx="58" cy="132" rx="4" ry="6.5" transform="rotate(-14 58 132)"/>
+        <ellipse cx="174" cy="112" rx="4" ry="6.5" transform="rotate(22 174 112)"/>
+        <ellipse cx="182" cy="132" rx="4" ry="6.5" transform="rotate(14 182 132)"/>
+      </g>
+
+      <!-- petto piumato -->
+      <path d="M120 100 Q166 118 156 190 Q148 226 120 230 Q92 226 84 190 Q74 118 120 100 Z" fill="#F1E4C4"/>
+      <g>${chestFeathers}</g>
+
+      <!-- disco facciale -->
+      <path d="M120 58 C160 58 180 90 174 122 C170 148 149 170 120 178 C91 170 70 148 66 122 C60 90 80 58 120 58 Z" fill="url(#faceGrad)" stroke="#BC9A5E" stroke-width="1.5"/>
+      <g>${faceRays}</g>
+
+      <!-- ciuffi -->
+      <path d="M82 90 Q92 72 106 80" fill="none" stroke="#A6845A" stroke-width="4" stroke-linecap="round"/>
+      <path d="M158 90 Q148 72 134 80" fill="none" stroke="#A6845A" stroke-width="4" stroke-linecap="round"/>
+
+      <!-- occhi -->
+      <circle cx="99" cy="114" r="20" fill="#2A2013"/>
+      <circle cx="141" cy="114" r="20" fill="#2A2013"/>
+      <circle cx="99" cy="114" r="17" fill="url(#eyeGrad)"/>
+      <circle cx="141" cy="114" r="17" fill="url(#eyeGrad)"/>
+      <circle cx="99" cy="114" r="17" fill="none" stroke="#1B140C" stroke-width="1.5"/>
+      <circle cx="141" cy="114" r="17" fill="none" stroke="#1B140C" stroke-width="1.5"/>
+      <circle cx="93" cy="107" r="4" fill="#FCF7EA" opacity="0.9"/>
+      <circle cx="135" cy="107" r="4" fill="#FCF7EA" opacity="0.9"/>
+      <circle cx="99" cy="120" r="1.6" fill="#000" opacity="0.6"/>
+      <circle cx="141" cy="120" r="1.6" fill="#000" opacity="0.6"/>
+
+      <!-- becco -->
+      <path d="M110 130 Q120 123 130 130 Q126 150 120 158 Q114 150 110 130 Z" fill="#E4C58A" stroke="#9C7D4E" stroke-width="1.2"/>
+      <path d="M115 133 Q120 129 125 133" fill="none" stroke="#9C7D4E" stroke-width="1" opacity="0.7"/>
+
+      <!-- zampe -->
+      <rect x="96" y="222" width="11" height="20" rx="5" fill="#D8B65E" stroke="#9C7D4E" stroke-width="1"/>
+      <rect x="133" y="222" width="11" height="20" rx="5" fill="#D8B65E" stroke="#9C7D4E" stroke-width="1"/>
+      <g stroke="#7A5A22" stroke-width="2.5" stroke-linecap="round">
+        <path d="M94 242 L86 249"/>
+        <path d="M101 245 L101 253"/>
+        <path d="M108 242 L115 249"/>
+        <path d="M132 242 L124 249"/>
+        <path d="M139 245 L139 253"/>
+        <path d="M146 242 L154 249"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
+function brandSeal(){
+  return `<svg width="34" height="34" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="42" fill="none" stroke="#B8935F" stroke-width="4"/>
+    <circle cx="50" cy="50" r="32" fill="none" stroke="#B8935F" stroke-width="1.5"/>
+    <path d="M35 55 L45 65 L67 40" fill="none" stroke="#B8935F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function renderHome(c){
+  c.innerHTML = `
+    <div class="home-hero">
+      <div class="home-owl">${owlSVG()}</div>
+      <div class="home-text">
+        <div class="home-title">Ciao, sono Sophia</div>
+        <div class="home-sub">Custodisco HYPOM, l'archivio della memoria aziendale. Quando qualcuno sta per lasciare l'azienda, portami da lui: gli faccio qualche domanda e trasformo le sue risposte in conoscenza catalogata, pronta per chi arriva dopo.</div>
+        <div class="home-cards">
+          <div class="home-card" id="go-interview">
+            <div class="home-card-icon">🦉</div>
+            <h4>Colloquio con l'AI</h4>
+            <p>Un'intervista guidata che raccoglie processi, contatti e trucchi del mestiere di un dipendente in uscita, e li trasforma in voci d'archivio.</p>
+          </div>
+          <div class="home-card" id="go-dashboard">
+            <div class="home-card-icon">🗂️</div>
+            <h4>Cruscotto</h4>
+            <p>Vedi tutti i fascicoli aperti, lo stato di avanzamento e aggiungi voci manualmente.</p>
+          </div>
+          <div class="home-card" id="go-search">
+            <div class="home-card-icon">🔎</div>
+            <h4>Cerca nell'archivio</h4>
+            <p>Trova rapidamente ciò che qualcuno ha già raccontato su un processo o un problema.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('go-interview').onclick = () => { state.view = {type:'interview'}; render(); };
+  document.getElementById('go-dashboard').onclick = () => { state.view = {type:'dashboard'}; render(); };
+  document.getElementById('go-search').onclick = () => { state.view = {type:'search'}; render(); };
+}
+
+/* ---------- colloquio AI ---------- */
+async function callClaude(messages, system){
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      system: system,
+      messages: messages
+    })
+  });
+  const data = await res.json();
+  const text = (data.content || []).map(b => b.text || '').join('\n');
+  return text;
+}
+
+function renderInterview(c){
+  const iv = state.interview;
+
+  if(state.employees.length === 0){
+    c.innerHTML = `<div class="empty-state"><h3>Nessun fascicolo ancora</h3><p>Prima di iniziare un colloquio, aggiungi il dipendente in uscita dal cruscotto.</p><button class="btn btn-primary" id="go-add" style="margin-top:14px;">Aggiungi dipendente</button></div>`;
+    document.getElementById('go-add').onclick = () => { state.view = {type:'dashboard'}; state.showAddEmployee = true; render(); };
+    return;
+  }
+
+  if(!iv.employeeId){
+    c.innerHTML = `
+      <div class="section-head"><div class="section-title">Con chi parla Sophia oggi?</div></div>
+      <div class="interview-setup">
+        <div class="field"><label>Dipendente in uscita</label>
+          <select id="iv-emp">
+            <option value="">Scegli un fascicolo…</option>
+            ${state.employees.map(e => `<option value="${e.id}">${escapeHtml(e.name)} — ${escapeHtml(e.role||'')}</option>`).join('')}
+          </select>
+        </div>
+        <button class="btn btn-primary" id="iv-start">Inizia colloquio</button>
+      </div>`;
+    document.getElementById('iv-start').onclick = () => {
+      const id = document.getElementById('iv-emp').value;
+      if(!id) return;
+      const emp = state.employees.find(e => e.id === id);
+      iv.employeeId = id;
+      iv.messages = [];
+      iv.extracted = null;
+      startInterview(emp);
+    };
+    return;
+  }
+
+  const emp = state.employees.find(e => e.id === iv.employeeId);
+  c.innerHTML = `
+    <div class="section-head">
+      <div class="section-title">Colloquio con ${escapeHtml(emp.name)}</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" id="iv-voice-toggle">${iv.voiceOn ? '🔊 Voce attiva' : '🔇 Voce disattivata'}</button>
+        <button class="btn btn-ghost" id="iv-change">Cambia dipendente</button>
+      </div>
+    </div>
+    <div class="chat-shell">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <button class="btn-mic ${iv.listening ? 'listening' : ''}" id="chat-mic" title="Parla con il microfono">🎤</button>
+        <textarea id="chat-input" placeholder="Scrivi o registra la tua risposta a Sophia…"></textarea>
+        <button class="btn btn-primary" id="chat-send">Invia</button>
+      </div>
+    </div>
+    <div class="chat-toolbar">
+      <span style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:rgba(243,233,210,0.6);">Quando hai raccolto abbastanza, estrai la conoscenza dal colloquio.</span>
+      <button class="btn btn-dark" id="iv-extract" ${iv.extracting ? 'disabled' : ''}>${iv.extracting ? 'Sto catalogando…' : "Estrai e salva voci d'archivio"}</button>
+    </div>
+    <div id="extract-box"></div>
+  `;
+  renderChatMessages();
+
+  document.getElementById('iv-change').onclick = () => { iv.employeeId = null; iv.messages = []; iv.extracted = null; window.speechSynthesis && window.speechSynthesis.cancel(); render(); };
+  document.getElementById('iv-voice-toggle').onclick = () => { iv.voiceOn = !iv.voiceOn; if(!iv.voiceOn && window.speechSynthesis) window.speechSynthesis.cancel(); render(); };
+  document.getElementById('chat-mic').onclick = toggleMic;
+  document.getElementById('chat-send').onclick = () => sendInterviewMessage(emp);
+  document.getElementById('chat-input').addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendInterviewMessage(emp); }
+  });
+  document.getElementById('iv-extract').onclick = () => extractKnowledge(emp);
+
+  if(iv.extracted){
+    document.getElementById('extract-box').innerHTML = `
+      <div class="extract-summary">
+        <h4>Catalogazione completata</h4>
+        <p>${iv.extracted.length} voci sono state aggiunte come bozze nel fascicolo di ${escapeHtml(emp.name)}. Vai nel cruscotto per rileggerle e sigillarle.</p>
+      </div>`;
+  }
+}
+
+let recognizer = null;
+function toggleMic(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const iv = state.interview;
+  if(!SR){
+    state.error = 'Il riconoscimento vocale non è supportato in questo browser. Prova con Chrome su desktop o Android.';
+    render();
+    return;
+  }
+  if(iv.listening){
+    if(recognizer) recognizer.stop();
+    return;
+  }
+  recognizer = new SR();
+  recognizer.lang = 'it-IT';
+  recognizer.interimResults = false;
+  recognizer.maxAlternatives = 1;
+  iv.listening = true;
+  state.error = null;
+  render();
+  recognizer.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    const input = document.getElementById('chat-input');
+    if(input) input.value = (input.value ? input.value + ' ' : '') + text;
+  };
+  recognizer.onerror = (e) => {
+    const reasons = {
+      'not-allowed': 'Il microfono è bloccato: se sei dentro l\'anteprima di Claude, questo ambiente non consente l\'accesso al microfono. Apri il file fuori da Claude (scaricato o pubblicato online) e riprova.',
+      'service-not-allowed': 'Il browser ha negato l\'accesso al microfono in questo contesto (probabile blocco dell\'iframe di anteprima).',
+      'audio-capture': 'Non trovo un microfono collegato al dispositivo.',
+      'no-speech': 'Non ho sentito nulla, riprova a parlare più vicino al microfono.'
+    };
+    state.error = reasons[e.error] || ('Errore microfono: ' + e.error);
+    iv.listening = false;
+    render();
+  };
+  recognizer.onend = () => {
+    iv.listening = false;
+    render();
+  };
+  try{
+    recognizer.start();
+  }catch(err){
+    state.error = 'Non riesco ad avviare il microfono in questo ambiente (probabile blocco dell\'iframe di anteprima di Claude). Prova ad aprire il file fuori da Claude.';
+    iv.listening = false;
+    render();
+  }
+}
+
+function pickFemaleItalianVoice(voices){
+  const hints = ['elsa','alice','federica','paola','giulia','francesca','samantha','monica','veronica','female','donna'];
+  const itVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('it'));
+  if(itVoices.length === 0) return null;
+  const named = itVoices.find(v => hints.some(h => v.name.toLowerCase().includes(h)));
+  return named || itVoices[0];
+}
+
+function speakText(text){
+  if(!state.interview.voiceOn) return;
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const plain = text.replace(/\*\*/g, '');
+  const utter = new SpeechSynthesisUtterance(plain);
+  utter.lang = 'it-IT';
+  utter.rate = 1;
+  utter.pitch = 1.25;
+  const voices = window.speechSynthesis.getVoices();
+  if(voices.length){
+    const v = pickFemaleItalianVoice(voices);
+    if(v) utter.voice = v;
+    window.speechSynthesis.speak(utter);
+  } else {
+    // le voci a volte si caricano in modo asincrono
+    window.speechSynthesis.onvoiceschanged = () => {
+      const v = pickFemaleItalianVoice(window.speechSynthesis.getVoices());
+      if(v) utter.voice = v;
+      window.speechSynthesis.speak(utter);
+    };
+  }
+}
+
+function formatMsgContent(text){
+  return escapeHtml(text).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+function renderChatMessages(){
+  const box = document.getElementById('chat-messages');
+  if(!box) return;
+  const iv = state.interview;
+  box.innerHTML = iv.messages.map(m => `
+    <div class="msg ${m.role==='assistant' ? 'msg-owl' : 'msg-user'}">
+      ${m.role==='assistant' ? '<div class="msg-owl-label">🦉 Sophia</div>' : ''}
+      ${formatMsgContent(m.content)}
+    </div>`).join('') + (iv.sending ? `<div class="chat-typing">Sophia sta scrivendo…</div>` : '');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function startInterview(emp){
+  render();
+  const iv = state.interview;
+  iv.sending = true;
+  render();
+  const firstName = (emp.name || '').trim().split(' ')[0] || emp.name;
+  const opening = `Ciao ${firstName}! Sono Sophia, il gufetto dell'ufficio HR — qui per imparare da te prima che tu spicchi il volo verso nuove avventure! 🦉 Ci tengo che tutto quello che hai costruito in questi anni non vada perso, quindi vorrei fare due chiacchiere rilassate, senza fretta. Per cominciare: **qual è stata la parte del tuo lavoro che richiedeva più attenzione ai dettagli, e che forse chi viene dopo di te potrebbe sottovalutare?**`;
+  // piccola pausa per dare la sensazione che Sophia stia "pensando"
+  await new Promise(res => setTimeout(res, 500));
+  iv.messages.push({role:'assistant', content: opening});
+  speakText(opening);
+  iv.sending = false;
+  render();
+}
+
+async function sendInterviewMessage(emp){
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const iv = state.interview;
+  iv.messages.push({role:'user', content: text});
+  input.value = '';
+  iv.sending = true;
+  renderChatMessages();
+  const system = `Sei Sophia, un gufetto dell'ufficio HR: caldo, curioso, un po' giocoso, mai formale o robotico. Usi ogni tanto un'emoji (🦉 ✨ 📌) ma senza esagerare. Stai raccogliendo la conoscenza tacita di ${emp.name} (ruolo: ${emp.role || 'non specificato'}) prima che lasci l'azienda, con una conversazione naturale in italiano. Fai una domanda alla volta, e mettila in **grassetto** (sintassi markdown **così**) per farla risaltare. Copia nel tempo tutte queste aree: processi chiave, contatti/relazioni, strumenti e sistemi, problemi ricorrenti e soluzioni, decisioni e motivazioni, consigli pratici. Se una risposta è interessante, fai prima una domanda di approfondimento breve, poi passa oltre. Tieni i messaggi brevi, 2-4 frasi al massimo.`;
+  try{
+    const reply = await callClaude(iv.messages.map(m => ({role:m.role, content:m.content})), system);
+    iv.messages.push({role:'assistant', content: reply});
+    speakText(reply);
+  }catch(err){
+    iv.messages.push({role:'assistant', content: 'Non riesco a rispondere in questo momento. Riprova.'});
+  }
+  iv.sending = false;
+  render();
+}
+
+async function extractKnowledge(emp){
+  const iv = state.interview;
+  if(iv.messages.length === 0) return;
+  iv.extracting = true;
+  render();
+  const transcript = iv.messages.map(m => `${m.role==='assistant'?'Sophia':emp.name}: ${m.content}`).join('\n');
+  const system = `Analizza questa trascrizione di un colloquio di raccolta conoscenza con un dipendente in uscita. Estrai le informazioni utili e restituisci SOLO un JSON valido (nessun testo prima o dopo, nessun blocco markdown), un array di oggetti con questi campi: "category" (uno tra: processi, contatti, strumenti, problemi, decisioni, consigli), "title" (breve titolo in italiano), "content" (riassunto dettagliato in italiano, in prima persona neutra). Includi solo voci con contenuto informativo reale.`;
+  try{
+    const raw = await callClaude([{role:'user', content: transcript}], system);
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const items = JSON.parse(clean);
+    const validCats = CATEGORIES.map(c => c.key);
+    const newEntries = items.filter(it => validCats.includes(it.category) && it.title && it.content)
+      .map(it => ({id: uid(), employeeId: emp.id, category: it.category, title: it.title, content: it.content, status:'draft', createdAt: Date.now()}));
+    state.entries.unshift(...newEntries);
+    iv.extracted = newEntries;
+    await persist();
+  }catch(err){
+    state.error = 'Non sono riuscito a catalogare il colloquio. Riprova tra poco.';
+  }
+  iv.extracting = false;
+  render();
+}
+
+function renderDashboard(c){
+  const totalSealed = state.entries.filter(e => e.status === 'sealed').length;
+  const totalDraft = state.entries.filter(e => e.status === 'draft').length;
+  const avgCoverage = state.employees.length
+    ? Math.round(state.employees.reduce((s,e) => s + coverageForEmployee(e.id), 0) / state.employees.length / CATEGORIES.length * 100)
+    : 0;
+
+  let html = `
+    <div class="stats">
+      <div class="stat-card"><div class="stat-num">${state.employees.length}</div><div class="stat-label">Dipendenti in uscita tracciati</div></div>
+      <div class="stat-card"><div class="stat-num">${totalSealed}</div><div class="stat-label">Voci di conoscenza sigillate</div></div>
+      <div class="stat-card"><div class="stat-num">${totalDraft}</div><div class="stat-label">Bozze da completare</div></div>
+      <div class="stat-card"><div class="stat-num">${avgCoverage}%</div><div class="stat-label">Copertura media delle aree</div></div>
+    </div>
+    <div class="section-head"><div class="section-title">Cartelle di passaggio consegne</div></div>
+  `;
+
+  if(state.employees.length === 0){
+    html += `
+      <div class="folder-grid">
+        <div class="add-card" id="add-emp-card"><div class="add-plus">+</div><div class="add-label">Aggiungi dipendente in uscita</div></div>
+      </div>
+      <div class="empty-state" style="margin-top:22px;">
+        <h3>Lo schedario è vuoto</h3>
+        <p>Aggiungi un dipendente che sta per lasciare l'azienda per iniziare a raccogliere ciò che sa: processi, contatti, problemi già risolti. Non aspettare l'ultimo giorno.</p>
+      </div>`;
+    c.innerHTML = html;
+  } else {
+    html += `<div class="folder-grid">`;
+    state.employees.forEach(emp => {
+      const covered = coverageForEmployee(emp.id);
+      const pct = Math.round(covered / CATEGORIES.length * 100);
+      const d = daysUntil(emp.lastDay);
+      let metaLine = '—';
+      if(d !== null){
+        metaLine = d > 0 ? `<b>${d} giorni</b> all'ultimo giorno` : (d === 0 ? `<b>Ultimo giorno è oggi</b>` : `Uscito il ${fmtDate(emp.lastDay)}`);
+      }
+      html += `
+        <div class="folder-card" data-open="${emp.id}">
+          <div class="folder-tab">Fascicolo</div>
+          <div class="folder-name">${escapeHtml(emp.name)}</div>
+          <div class="folder-role">${escapeHtml(emp.role || 'Ruolo non specificato')}</div>
+          <div class="folder-meta">
+            <div>${metaLine}</div>
+            <div>Successore: ${emp.successor ? escapeHtml(emp.successor) : 'da assegnare'}</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div class="progress-pct">${pct}%</div>
+          </div>
+          <div class="progress-caption">${covered}/${CATEGORIES.length} aree coperte</div>
+        </div>`;
+    });
+    html += `<div class="add-card" id="add-emp-card"><div class="add-plus">+</div><div class="add-label">Aggiungi dipendente in uscita</div></div>`;
+    html += `</div>`;
+    c.innerHTML = html;
+  }
+
+  document.getElementById('add-emp-card').onclick = () => { state.showAddEmployee = true; render(); };
+  c.querySelectorAll('[data-open]').forEach(card => {
+    card.onclick = () => {
+      const emp = state.employees.find(e => e.id === card.dataset.open);
+      state.view = {type:'detail', id: emp.id, cat: CATEGORIES[0].key};
+      render();
+    };
+  });
+}
+
+function renderAddEmployeeModal(){
+  const wrap = document.createElement('div');
+  wrap.className = 'overlay';
+  wrap.innerHTML = `
+    <div class="modal">
+      <h3>Nuovo fascicolo di passaggio</h3>
+      <div class="field"><label>Nome e cognome</label><input type="text" id="f-name" placeholder="es. Maria Conti"></div>
+      <div class="field"><label>Ruolo</label><input type="text" id="f-role" placeholder="es. Responsabile acquisti"></div>
+      <div class="field"><label>Successore (opzionale)</label><input type="text" id="f-succ" placeholder="es. Luca Bianchi"></div>
+      <div class="field"><label>Ultimo giorno di lavoro</label><input type="date" id="f-day"></div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" id="f-cancel">Annulla</button>
+        <button class="btn btn-primary" id="f-save">Crea fascicolo</button>
+      </div>
+    </div>`;
+  document.body.appendChild(wrap);
+  wrap.addEventListener('click', e => { if(e.target === wrap){ state.showAddEmployee = false; document.body.removeChild(wrap); } });
+  wrap.querySelector('#f-cancel').onclick = () => { state.showAddEmployee = false; document.body.removeChild(wrap); };
+  wrap.querySelector('#f-save').onclick = async () => {
+    const name = wrap.querySelector('#f-name').value.trim();
+    if(!name){ wrap.querySelector('#f-name').focus(); return; }
+    const emp = {
+      id: uid(),
+      name,
+      role: wrap.querySelector('#f-role').value.trim(),
+      successor: wrap.querySelector('#f-succ').value.trim(),
+      lastDay: wrap.querySelector('#f-day').value,
+      createdAt: Date.now()
+    };
+    state.employees.unshift(emp);
+    state.showAddEmployee = false;
+    document.body.removeChild(wrap);
+    render();
+    await persist();
+  };
+}
+
+function renderDetail(c){
+  const emp = state.employees.find(e => e.id === state.view.id);
+  if(!emp){ state.view = {type:'dashboard'}; render(); return; }
+  const activeCat = state.view.cat || CATEGORIES[0].key;
+  const covered = coverageForEmployee(emp.id);
+  const d = daysUntil(emp.lastDay);
+
+  let html = `<button class="back-link">← Torna al cruscotto</button>
+    <div class="detail-header">
+      <div>
+        <div class="detail-title">${escapeHtml(emp.name)}</div>
+        <div class="detail-role">${escapeHtml(emp.role || 'Ruolo non specificato')}</div>
+        <div class="detail-facts">
+          <span>Ultimo giorno<b>${emp.lastDay ? fmtDate(emp.lastDay) : 'non impostato'}</b></span>
+          <span>Countdown<b>${d===null?'—':(d>=0?d+' giorni':'terminato')}</b></span>
+          <span>Successore<b>${emp.successor ? escapeHtml(emp.successor) : 'da assegnare'}</b></span>
+          <span>Copertura<b>${covered}/${CATEGORIES.length} aree</b></span>
+        </div>
+      </div>
+      <div class="detail-actions">
+        <button class="btn btn-danger" id="del-emp">Elimina fascicolo</button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="cat-list">
+        ${CATEGORIES.map(cat => {
+          const all = entriesFor(emp.id, cat.key);
+          const sealed = all.filter(e => e.status==='sealed').length;
+          return `<div class="cat-item ${cat.key===activeCat?'active':''}" data-cat="${cat.key}">
+            <div class="cat-name"><span>${cat.label}</span><span class="cat-count">${sealed}/${all.length||0}</span></div>
+            <div class="cat-desc">${cat.desc}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="entries-panel" id="entries-panel"></div>
+    </div>`;
+  c.innerHTML = html;
+
+  c.querySelector('.back-link').onclick = () => { state.view = {type:'dashboard'}; render(); };
+  c.querySelector('#del-emp').onclick = async () => {
+    if(confirm(`Eliminare il fascicolo di ${emp.name}? Tutte le voci raccolte andranno perse.`)){
+      state.employees = state.employees.filter(e => e.id !== emp.id);
+      state.entries = state.entries.filter(e => e.employeeId !== emp.id);
+      state.view = {type:'dashboard'};
+      render();
+      await persist();
+    }
+  };
+  c.querySelectorAll('[data-cat]').forEach(el => {
+    el.onclick = () => { state.view.cat = el.dataset.cat; state.addEntryOpenFor = null; render(); };
+  });
+
+  renderEntriesPanel(document.getElementById('entries-panel'), emp, activeCat);
+}
+
+function renderEntriesPanel(panel, emp, catKey){
+  const cat = CATEGORIES.find(c => c.key === catKey);
+  const items = entriesFor(emp.id, catKey);
+
+  let html = `<h3>${cat.label}</h3><div class="cat-desc-full">${cat.desc}</div>`;
+
+  if(items.length === 0){
+    html += `<div class="empty-state" style="padding:30px 20px;"><h3>Nessuna voce ancora</h3><p>Raccogli qui tutto ciò che ${escapeHtml(emp.name.split(' ')[0])} sa su "${cat.label.toLowerCase()}" prima che se ne dimentichi.</p></div>`;
+  } else {
+    items.forEach(entry => {
+      html += `
+        <div class="entry-card" data-entry="${entry.id}">
+          ${entry.status==='sealed' ? sealSVG(fmtDate(new Date(entry.sealedAt).toISOString().slice(0,10))) : ''}
+          <div class="entry-top">
+            <div class="entry-title">${escapeHtml(entry.title)}</div>
+            ${entry.status==='draft' ? '<span class="pill">Bozza</span>' : ''}
+          </div>
+          <div class="entry-content">${escapeHtml(entry.content)}</div>
+          <div class="entry-foot">
+            <div class="entry-date">Aggiunta il ${fmtDate(new Date(entry.createdAt).toISOString().slice(0,10))}</div>
+            <div class="entry-btns">
+              ${entry.status==='draft' ? `<button class="btn btn-dark" data-seal="${entry.id}">Sigilla</button>` : ''}
+              <button class="btn btn-ghost" data-del="${entry.id}">Elimina</button>
+            </div>
+          </div>
+        </div>`;
+    });
+  }
+
+  if(state.addEntryOpenFor === catKey){
+    html += `
+      <div class="add-entry-box">
+        <div class="field"><label>Titolo</label><input type="text" id="e-title" placeholder="es. Come si chiude il mese contabile"></div>
+        <div class="field"><label>Dettagli</label><textarea id="e-content" placeholder="Descrivi il processo, il contatto, il problema o il consiglio con più dettaglio possibile."></textarea></div>
+        <div class="form-actions">
+          <button class="btn btn-ghost" id="e-cancel">Annulla</button>
+          <button class="btn btn-primary" id="e-save">Salva voce</button>
+        </div>
+      </div>`;
+  } else {
+    html += `<button class="btn btn-primary" id="add-entry-btn" style="margin-top:6px;">+ Aggiungi voce</button>`;
+  }
+
+  panel.innerHTML = html;
+
+  panel.querySelectorAll('[data-seal]').forEach(b => b.onclick = async () => {
+    const entry = state.entries.find(e => e.id === b.dataset.seal);
+    entry.status = 'sealed';
+    entry.sealedAt = Date.now();
+    render();
+    await persist();
+  });
+  panel.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if(confirm('Eliminare questa voce?')){
+      state.entries = state.entries.filter(e => e.id !== b.dataset.del);
+      render();
+      await persist();
+    }
+  });
+
+  const addBtn = panel.querySelector('#add-entry-btn');
+  if(addBtn) addBtn.onclick = () => { state.addEntryOpenFor = catKey; render(); };
+  const cancelBtn = panel.querySelector('#e-cancel');
+  if(cancelBtn) cancelBtn.onclick = () => { state.addEntryOpenFor = null; render(); };
+  const saveBtn = panel.querySelector('#e-save');
+  if(saveBtn) saveBtn.onclick = async () => {
+    const title = panel.querySelector('#e-title').value.trim();
+    const content = panel.querySelector('#e-content').value.trim();
+    if(!title || !content) return;
+    state.entries.unshift({
+      id: uid(), employeeId: emp.id, category: catKey, title, content,
+      status: 'draft', createdAt: Date.now()
+    });
+    state.addEntryOpenFor = null;
+    render();
+    await persist();
+  };
+}
+
+function renderSearch(c){
+  state._query = state._query || '';
+  state._filterCat = state._filterCat || '';
+  state._filterEmp = state._filterEmp || '';
+
+  let html = `
+    <div class="section-head"><div class="section-title">Cerca nell'archivio</div></div>
+    <div class="search-bar">
+      <input type="text" id="s-query" placeholder="Cerca per parola chiave…" value="${escapeHtml(state._query)}">
+      <select id="s-cat"><option value="">Tutte le aree</option>
+        ${CATEGORIES.map(cat => `<option value="${cat.key}" ${state._filterCat===cat.key?'selected':''}>${cat.label}</option>`).join('')}
+      </select>
+      <select id="s-emp"><option value="">Tutti i dipendenti</option>
+        ${state.employees.map(e => `<option value="${e.id}" ${state._filterEmp===e.id?'selected':''}>${escapeHtml(e.name)}</option>`).join('')}
+      </select>
+    </div>
+    <div id="s-results"></div>
+  `;
+  c.innerHTML = html;
+
+  const doSearch = () => {
+    state._query = document.getElementById('s-query').value;
+    state._filterCat = document.getElementById('s-cat').value;
+    state._filterEmp = document.getElementById('s-emp').value;
+    const q = state._query.toLowerCase().trim();
+    const results = state.entries.filter(e => {
+      if(state._filterCat && e.category !== state._filterCat) return false;
+      if(state._filterEmp && e.employeeId !== state._filterEmp) return false;
+      if(!q) return true;
+      return (e.title + ' ' + e.content).toLowerCase().includes(q);
+    }).sort((a,b) => b.createdAt - a.createdAt);
+
+    const box = document.getElementById('s-results');
+    if(results.length === 0){
+      box.innerHTML = `<div class="empty-state"><h3>Nessun risultato</h3><p>Prova un'altra parola chiave o rimuovi i filtri.</p></div>`;
+      return;
+    }
+    box.innerHTML = results.map(e => {
+      const emp = state.employees.find(em => em.id === e.employeeId);
+      const cat = CATEGORIES.find(c => c.key === e.category);
+      return `<div class="result-card">
+        <div class="result-meta">
+          <span>${escapeHtml(emp ? emp.name : 'Sconosciuto')}</span>
+          <span>·</span>
+          <span>${cat ? cat.label : ''}</span>
+          <span>·</span>
+          <span>${e.status==='sealed' ? '<b>Sigillata</b>' : 'Bozza'}</span>
+        </div>
+        <div class="entry-title">${escapeHtml(e.title)}</div>
+        <div class="entry-content">${escapeHtml(e.content)}</div>
+      </div>`;
+    }).join('');
+  };
+
+  document.getElementById('s-query').addEventListener('input', doSearch);
+  document.getElementById('s-cat').addEventListener('change', doSearch);
+  document.getElementById('s-emp').addEventListener('change', doSearch);
+  doSearch();
+}
+
+loadState();
+</script>
+</body>
+</html>
+</body>
+</html>
